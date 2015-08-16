@@ -39,7 +39,7 @@ void http_server::handle_resolve(
             acceptor_.set_option(boost::asio::socket_base::reuse_address(true));
             acceptor_.bind(ep);
 
-            LOG_DEBUG() << "listening...";
+            LOG_DEBUG() << "listening";
             acceptor_.listen();
 
             boost::system::error_code success;

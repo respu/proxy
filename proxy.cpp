@@ -68,7 +68,7 @@ void proxy::handle_resolve(
             acceptor_.set_option(socket_base::reuse_address(true));
             acceptor_.bind(ep);
 
-            LOG_DEBUG() << "listening...";
+            LOG_DEBUG() << "listening";
             acceptor_.listen();
 
             boost::system::error_code success;

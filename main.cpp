@@ -4,20 +4,44 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
+#include <string>
+
+#include <boost/program_options.hpp>
 
 #include "proxy.h"
-#include "http_server.h"
 
-int main()
+int main(int argc, char** argv)
 {
     try
     {
-        boost::asio::io_service io_service;
-        //http_server server(io_service, "0.0.0.0", "http-alt");
-        //server.start();
+        namespace po = boost::program_options;
+        po::variables_map vm;
+        po::options_description desc("Allowed options");
+        desc.add_options()
+                ("help,h", "this help message")
+                ("saddr", po::value<std::string>()->default_value("localhost"), "source address")
+                ("sport", po::value<std::string>()->default_value("http-alt"), "source service name or port")
+                ("daddr", po::value<std::string>()->default_value("localhost"), "destination address")
+                ("dport", po::value<std::string>()->default_value("http"), "destination service name or port");
 
-        proxy instance(io_service, "localhost", "2222", "localhost", "22");
-        instance.start();
+        po::store(po::parse_command_line(argc, argv, desc), vm);
+        po::notify(vm);
+        boost::asio::io_service io_service;
+
+        if (vm.count("help"))
+        {
+            std::cout << desc << std::endl;
+            return 0;
+        }
+
+        proxy service(
+                    io_service,
+                    vm["saddr"].as<std::string>(),
+                    vm["sport"].as<std::string>(),
+                    vm["daddr"].as<std::string>(),
+                    vm["dport"].as<std::string>());
+
+        service.start();
         io_service.run();
     }
     catch (std::exception& e)

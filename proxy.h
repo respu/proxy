@@ -9,9 +9,9 @@
 #include <vector>
 
 #include <boost/asio.hpp>
-#include <boost/smart_ptr.hpp>
 #include <boost/bind.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <boost/smart_ptr.hpp>
 
 #include "session.h"
 

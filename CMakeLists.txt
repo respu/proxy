@@ -5,7 +5,7 @@ add_executable(${PROJECT_NAME} ${SRC_LIST})
 
 set(Boost_USE_STATIC_LIBS        ON)
 set(Boost_USE_MULTITHREADED      ON)
-find_package(Boost 1.55.0 REQUIRED COMPONENTS log filesystem thread system)
+find_package(Boost 1.55.0 REQUIRED COMPONENTS log filesystem program_options thread system)
 if(Boost_FOUND)
 
     if(NOT Boost_USE_STATIC_LIBS)

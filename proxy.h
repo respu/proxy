@@ -27,10 +27,10 @@ public:
 
     proxy(
             boost::asio::io_service& io_service,
-            const std::string& from_host,
-            const std::string& from_port,
-            const std::string& to_host,
-            const std::string& to_port,
+            const std::string& shost,
+            const std::string& sport,
+            const std::string& dhost,
+            const std::string& dport,
             size_t buffer_size = 4096);
 
     virtual ~proxy();

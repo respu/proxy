@@ -12,18 +12,18 @@ using namespace boost::asio;
 
 proxy::proxy(
         boost::asio::io_service& io_service,
-        const std::string& from_host,
-        const std::string& from_port,
-        const std::string& to_host,
-        const std::string& to_port,
+        const std::string& shost,
+        const std::string& sport,
+        const std::string& dhost,
+        const std::string& dport,
         size_t buffer_size) :
     io_service_(io_service),
     client_(io_service),
     server_(io_service),
     acceptor_(io_service),
     resolver_(io_service),
-    from_(from_host, from_port),
-    to_(to_host, to_port),
+    from_(shost, sport),
+    to_(dhost, dport),
     buffer_size_(buffer_size)
 {
 }

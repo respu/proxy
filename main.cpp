@@ -19,14 +19,12 @@ int main(int argc, char** argv)
         po::options_description desc("Allowed options");
         desc.add_options()
                 ("help,h", "this help message")
-                ("saddr", po::value<std::string>()->default_value("localhost"), "source address")
+                ("shost", po::value<std::string>()->default_value("localhost"), "source hostname")
                 ("sport", po::value<std::string>()->default_value("http-alt"), "source service name or port")
-                ("daddr", po::value<std::string>()->default_value("localhost"), "destination address")
+                ("dhost", po::value<std::string>()->default_value("localhost"), "destination hostname")
                 ("dport", po::value<std::string>()->default_value("http"), "destination service name or port");
 
         po::store(po::parse_command_line(argc, argv, desc), vm);
-        po::notify(vm);
-        boost::asio::io_service io_service;
 
         if (vm.count("help"))
         {
@@ -34,6 +32,7 @@ int main(int argc, char** argv)
             return 0;
         }
 
+        boost::asio::io_service io_service;
         proxy service(
                     io_service,
                     vm["saddr"].as<std::string>(),

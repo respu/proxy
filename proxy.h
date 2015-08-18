@@ -47,6 +47,10 @@ protected:
             const boost::system::error_code& ec,
             session::ptr session);
 
+    void handle_signal(
+            const boost::system::error_code& error,
+            int signal_number);
+
     boost::asio::io_service& io_service_;
 
     boost::asio::ip::tcp::socket client_;
@@ -60,6 +64,8 @@ protected:
     boost::asio::ip::tcp::resolver::query from_;
 
     boost::asio::ip::tcp::resolver::query to_;
+
+    boost::asio::signal_set signal_set_;
 
     std::vector<session::ptr> sessions_;
 

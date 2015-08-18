@@ -35,9 +35,9 @@ int main(int argc, char** argv)
         boost::asio::io_service io_service;
         proxy service(
                     io_service,
-                    vm["saddr"].as<std::string>(),
+                    vm["shost"].as<std::string>(),
                     vm["sport"].as<std::string>(),
-                    vm["daddr"].as<std::string>(),
+                    vm["dhost"].as<std::string>(),
                     vm["dport"].as<std::string>());
 
         service.start();

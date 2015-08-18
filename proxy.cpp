@@ -24,8 +24,16 @@ proxy::proxy(
     resolver_(io_service),
     from_(shost, sport),
     to_(dhost, dport),
-    buffer_size_(buffer_size)
+    buffer_size_(buffer_size),
+    signal_set_(io_service)
 {
+    signal_set_.add(SIGINT);
+    signal_set_.async_wait(
+                boost::bind(
+                    &proxy::handle_signal,
+                    this,
+                    boost::asio::placeholders::error,
+                    boost::asio::placeholders::signal_number));
 }
 
 proxy::~proxy()
@@ -34,7 +42,7 @@ proxy::~proxy()
 
 void proxy::start()
 {
-    LOG_DEBUG() << "starting proxy "
+    LOG_INFO() << "starting proxy "
                 << "from=[" << from_.host_name()
                 << ":" << from_.service_name() << "] "
                 << "to=[" << to_.host_name()
@@ -61,14 +69,14 @@ void proxy::handle_resolve(
         {
             ip::tcp::endpoint ep(*it);
 
-            LOG_DEBUG() << "from endpoint=["
+            LOG_INFO() << "from endpoint=["
                         << ep.address() << ":" << ep.port() << "]";
 
             acceptor_.open(ep.protocol());
             acceptor_.set_option(socket_base::reuse_address(true));
             acceptor_.bind(ep);
 
-            LOG_DEBUG() << "listening";
+            LOG_INFO() << "listening";
             acceptor_.listen();
 
             boost::system::error_code success;
@@ -90,7 +98,7 @@ void proxy::handle_accept(
     {
         if (session_ptr)
         {
-            LOG_DEBUG() << "connection accepted";
+            LOG_INFO() << "connection accepted";
 
             session_ptr->start();
 
@@ -111,6 +119,34 @@ void proxy::handle_accept(
                         placeholders::error,
                         ptr));
 
+    }
+    else
+    {
+        LOG_ERROR() << "ec=[" << ec << "] message=[" << ec.message() << "]";
+    }
+}
+
+void proxy::handle_signal(
+        const boost::system::error_code& ec,
+        int signal_number)
+{
+    if (!ec)
+    {
+        LOG_INFO() << "signal=[" << signal_number << "] received";
+        if (signal_number == SIGINT)
+        {
+            LOG_INFO() << "stopping now";
+            io_service_.stop();
+        }
+        else
+        {
+            signal_set_.async_wait(
+                        boost::bind(
+                            &proxy::handle_signal,
+                            this,
+                            boost::asio::placeholders::error,
+                            boost::asio::placeholders::signal_number));
+        }
     }
     else
     {

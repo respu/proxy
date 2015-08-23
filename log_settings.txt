@@ -1,0 +1,18 @@
+#
+#            Copyright (c) Marco Amorim 2015.
+# Distributed under the Boost Software License, Version 1.0.
+#    (See accompanying file LICENSE_1_0.txt or copy at
+#          http://www.boost.org/LICENSE_1_0.txt)
+#
+[Core]
+Filter="%Severity% >= 2"
+
+[Sinks.1]
+Destination=Console
+Format="%TimeStamp%: <%Severity%> [%Channel%] %Message%"
+
+[Sinks.2]
+Destination=TextFile
+FileName=proxy.log
+AutoFlush=true
+Format="%TimeStamp%: <%Severity%> [%Channel%] %Message%"

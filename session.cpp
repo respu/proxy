@@ -1,20 +1,20 @@
-//          Copyright Marco Amorim 2015.
+//
+//            Copyright (c) Marco Amorim 2015.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
+//
 #include "session.h"
 
 #include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
-
-#include "log.h"
 
 session::session(
         boost::asio::io_service& io_service,
         const std::string& host,
         const std::string& port,
         size_t buffer_size) :
+    logger_(boost::log::keywords::channel = std::string("session") + std::string(".23")),
     io_service_(io_service),
     client_(io_service),
     server_(io_service),
@@ -120,7 +120,7 @@ void session::handle_read(
         boost::asio::ip::tcp::socket& from,
         boost::asio::ip::tcp::socket& to)
 {
-    LOG_DEBUG() << "bytes received: " << bytes_tranferred;
+    LOG_TRACE() << "bytes received: " << bytes_tranferred;
 
     if (!ec && bytes_tranferred)
     {
@@ -158,7 +158,7 @@ void session::handle_read(
         }
         else
         {
-            LOG_DEBUG() << "connection successfully closed";
+            LOG_DEBUG() << "connection closed";
         }
 
         server_.close();
@@ -171,7 +171,7 @@ void session::handle_send(
         size_t bytes_tranferred,
         sp_buffer)
 {
-    LOG_DEBUG() << "bytes sent: " << bytes_tranferred;
+    LOG_TRACE() << "bytes sent: " << bytes_tranferred;
 
     if (!ec)
     {

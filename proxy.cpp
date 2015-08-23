@@ -1,11 +1,11 @@
-//          Copyright Marco Amorim 2015.
+//
+//            Copyright (c) Marco Amorim 2015.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
+//
 #include <iostream>
 
-#include "log.h"
 #include "proxy.h"
 
 using namespace boost::asio;
@@ -17,6 +17,7 @@ proxy::proxy(
         const std::string& dhost,
         const std::string& dport,
         size_t buffer_size) :
+    logger_(boost::log::keywords::channel = "proxy"),
     io_service_(io_service),
     client_(io_service),
     server_(io_service),
@@ -43,9 +44,9 @@ proxy::~proxy()
 void proxy::start()
 {
     LOG_INFO() << "starting proxy "
-                << "from=[" << from_.host_name()
+                << "src=[" << from_.host_name()
                 << ":" << from_.service_name() << "] "
-                << "to=[" << to_.host_name()
+                << "dst=[" << to_.host_name()
                 << ":" << to_.service_name() << "]";
 
     resolver_.async_resolve(

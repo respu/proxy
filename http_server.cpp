@@ -1,19 +1,19 @@
-//          Copyright Marco Amorim 2015.
+//
+//            Copyright (c) Marco Amorim 2015.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
+//
 #include "http_server.h"
 
 #include <boost/make_shared.hpp>
 #include <boost/bind.hpp>
 
-#include "log.h"
-
 http_server::http_server(
         boost::asio::io_service& io_service,
         const std::string& host,
         const std::string& port) :
+    logger_(boost::log::keywords::channel = "http_server"),
     io_service_(io_service),
     resolver_(io_service),
     acceptor_(io_service),

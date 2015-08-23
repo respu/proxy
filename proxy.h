@@ -1,8 +1,9 @@
-//          Copyright Marco Amorim 2015.
+//
+//            Copyright (c) Marco Amorim 2015.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
+//
 #pragma once
 
 #include <string>
@@ -14,6 +15,7 @@
 #include <boost/smart_ptr.hpp>
 
 #include "session.h"
+#include "log.h"
 
 class proxy :
         public boost::enable_shared_from_this<proxy>
@@ -50,6 +52,8 @@ protected:
     void handle_signal(
             const boost::system::error_code& error,
             int signal_number);
+
+    logger_type logger_;
 
     boost::asio::io_service& io_service_;
 

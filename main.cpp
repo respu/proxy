@@ -1,10 +1,12 @@
-//          Copyright Marco Amorim 2015.
+//
+//            Copyright (c) Marco Amorim 2015.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-
+//
 #include <iostream>
 #include <string>
+#include <sstream>
 
 #include <boost/program_options.hpp>
 
@@ -19,6 +21,8 @@ int main(int argc, char** argv)
         po::options_description desc("Allowed options");
         desc.add_options()
                 ("help,h", "this help message")
+                ("log-settings", po::value<std::string>()->default_value(""), "log settings file name")
+                ("log-level,l", po::value<std::string>()->default_value("info"), "log level (trace|debug|info|warning|error|fatal")
                 ("shost", po::value<std::string>()->default_value("localhost"), "source hostname")
                 ("sport", po::value<std::string>()->default_value("http-alt"), "source service name or port")
                 ("dhost", po::value<std::string>()->default_value("localhost"), "destination hostname")
@@ -31,6 +35,10 @@ int main(int argc, char** argv)
             std::cout << desc << std::endl;
             return 0;
         }
+
+        init_log_system(
+                    vm["log-settings"].as<std::string>(),
+                    vm["log-level"].as<std::string>());
 
         boost::asio::io_service io_service;
         proxy service(

@@ -13,7 +13,7 @@ http_server::http_server(
         boost::asio::io_service& io_service,
         const std::string& host,
         const std::string& port) :
-    logger_(boost::log::keywords::channel = "http_server"),
+    logger_(boost::log::keywords::channel = "net.http_server"),
     io_service_(io_service),
     resolver_(io_service),
     acceptor_(io_service),

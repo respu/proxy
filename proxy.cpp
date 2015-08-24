@@ -17,7 +17,7 @@ proxy::proxy(
         const std::string& dhost,
         const std::string& dport,
         size_t buffer_size) :
-    logger_(boost::log::keywords::channel = "proxy"),
+    logger_(boost::log::keywords::channel = "net.proxy"),
     io_service_(io_service),
     client_(io_service),
     server_(io_service),

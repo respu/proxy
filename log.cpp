@@ -33,14 +33,8 @@ void init_log_system(
         const std::string& log_cfg,
         const std::string& log_level)
 {
-    std::map<std::string, trivial::severity_level> severity_map;
-    severity_map["trace"] = trivial::trace;
-    severity_map["debug"] = trivial::debug;
-    severity_map["info"] = trivial::info;
-    severity_map["warning"] = trivial::warning;
-    severity_map["error"] = trivial::error;
-    severity_map["fatal"] = trivial::fatal;
-
+    logging::register_simple_formatter_factory< trivial::severity_level, char >("Severity");
+    logging::register_simple_filter_factory< trivial::severity_level, char >("Severity");
     logging::add_common_attributes();
 
     if (!log_cfg.empty())
@@ -57,6 +51,14 @@ void init_log_system(
     }
     else
     {
+        std::map< std::string, trivial::severity_level > severity_map;
+        severity_map["trace"] = trivial::trace;
+        severity_map["debug"] = trivial::debug;
+        severity_map["info"] = trivial::info;
+        severity_map["warning"] = trivial::warning;
+        severity_map["error"] = trivial::error;
+        severity_map["fatal"] = trivial::fatal;
+
         logging::add_console_log(
             std::clog,
             keywords::format =
@@ -68,10 +70,10 @@ void init_log_system(
                     << expr::smessage
             )
         );
-    }
 
-    logging::core::get()->set_filter
-    (
-        trivial::severity >= severity_map[log_level]
-    );
+        logging::core::get()->set_filter
+        (
+            trivial::severity >= severity_map[log_level]
+        );
+    }
 }

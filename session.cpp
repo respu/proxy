@@ -14,7 +14,7 @@ session::session(
         const std::string& host,
         const std::string& port,
         size_t buffer_size) :
-    logger_(boost::log::keywords::channel = std::string("session") + std::string(".23")),
+    logger_(boost::log::keywords::channel = std::string("net.session")),
     io_service_(io_service),
     client_(io_service),
     server_(io_service),

@@ -5,14 +5,23 @@
 #          http://www.boost.org/LICENSE_1_0.txt)
 #
 [Core]
-Filter="%Severity% >= 2"
+Filter="%Severity% >= trace"
 
-[Sinks.1]
+[Sinks.Console]
 Destination=Console
 Format="%TimeStamp%: <%Severity%> [%Channel%] %Message%"
+Filter="%Severity% >= info"
 
-[Sinks.2]
+[Sinks.FileFull]
 Destination=TextFile
 FileName=proxy.log
 AutoFlush=true
 Format="%TimeStamp%: <%Severity%> [%Channel%] %Message%"
+Filter="%Severity% >= trace"
+
+[Sinks.FileOnlySessions]
+Destination=TextFile
+FileName=proxy_sessions.log
+AutoFlush=true
+Format="%TimeStamp%: <%Severity%> [%Channel%] %Message%"
+Filter="%Channel% begins_with net.session"

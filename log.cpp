@@ -30,20 +30,20 @@ BOOST_LOG_ATTRIBUTE_KEYWORD(severity, "Severity", logging::trivial::severity_lev
 BOOST_LOG_ATTRIBUTE_KEYWORD(channel, "Channel", std::string)
 
 void init_log_system(
-        const std::string& log_cfg,
-        const std::string& log_level)
+        const std::string& settings_file,
+        const std::string& severity_level)
 {
     logging::register_simple_formatter_factory< trivial::severity_level, char >("Severity");
     logging::register_simple_filter_factory< trivial::severity_level, char >("Severity");
     logging::add_common_attributes();
 
-    if (!log_cfg.empty())
+    if (!settings_file.empty())
     {
-        std::ifstream settings(log_cfg.c_str());
+        std::ifstream settings(settings_file.c_str());
         if (!settings.is_open())
         {
             std::ostringstream errm;
-            errm << "could not open " << log_cfg << " file";
+            errm << "could not open " << settings_file << " file";
             throw std::invalid_argument(errm.str());
         }
 
@@ -73,7 +73,7 @@ void init_log_system(
 
         logging::core::get()->set_filter
         (
-            trivial::severity >= severity_map[log_level]
+            trivial::severity >= severity_map[severity_level]
         );
     }
 }

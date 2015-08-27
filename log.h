@@ -21,7 +21,7 @@
 #define LOG_FATAL() BOOST_LOG_SEV(logger_, boost::log::trivial::fatal)
 
 void init_log_system(
-        const std::string& log_cfg,
-        const std::string& log_level);
+        const std::string& settings_file,
+        const std::string& severity_level);
 
-typedef boost::log::sources::severity_channel_logger_mt<boost::log::trivial::severity_level, std::string> logger_type;
+typedef boost::log::sources::severity_channel_logger_mt< boost::log::trivial::severity_level, std::string > logger_type;
